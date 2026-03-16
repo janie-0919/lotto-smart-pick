@@ -1,6 +1,8 @@
 /**
  * 동행복권 API 연동
- * Vercel Serverless(/api/lotto) 또는 Vite 커스텀 프록시 미들웨어 경유
+ * 경로: /api/lotto?drwNo={회차}
+ * → Vite 커스텀 프록시 미들웨어 (개발) / Vercel Serverless (프로덕션)
+ * → 실제 호출: https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do?srchLtEpsd={회차}
  */
 
 const CACHE_KEY = 'lotto_cache'
@@ -33,32 +35,28 @@ export const estimateLatestRound = () => {
 }
 
 // 응답 데이터를 내부 형식으로 변환
-const parseDrawData = (data) => {
-  if (!data || data.returnValue !== 'success') return null
+const parseDrawData = (raw) => {
+  const item = raw?.data?.list?.[0]
+  if (!item) return null
+  const d = item.ltRflYmd // "20260207"
+  const date = d ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : ''
   return {
-    round: data.drwNo,
-    date: data.drwNoDate,
-    numbers: [
-      data.drwtNo1,
-      data.drwtNo2,
-      data.drwtNo3,
-      data.drwtNo4,
-      data.drwtNo5,
-      data.drwtNo6,
-    ],
-    bonus: data.bnusNo,
-    firstPrize: data.firstWinamnt,
-    firstWinnerCount: data.firstPrzwnerCo,
+    round: item.ltEpsd,
+    date,
+    numbers: [item.tm1WnNo, item.tm2WnNo, item.tm3WnNo, item.tm4WnNo, item.tm5WnNo, item.tm6WnNo],
+    bonus: item.bnsWnNo,
+    firstPrize: item.rnk1WnAmt,
+    firstWinnerCount: item.rnk1WnNope,
   }
 }
 
 // 단일 회차 조회 (내부 프록시 경유)
 export const fetchLottoRound = async (round) => {
-  const res = await fetch(`/api/lotto?method=getLottoNumber&drwNo=${round}`)
+  const res = await fetch(`/api/lotto?drwNo=${round}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const data = await res.json()
   const parsed = parseDrawData(data)
-  if (!parsed) throw new Error('returnValue != success')
+  if (!parsed) throw new Error('데이터 없음')
   return parsed
 }
 
