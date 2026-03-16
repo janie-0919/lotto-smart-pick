@@ -1,12 +1,10 @@
 /**
  * 동행복권 API 연동
- * 1차: Vercel Serverless(/api/lotto) 또는 Vite 프록시
- * 폴백: allorigins.win CORS 우회 프록시
+ * Vercel Serverless(/api/lotto) 또는 Vite 커스텀 프록시 미들웨어 경유
  */
 
 const CACHE_KEY = 'lotto_cache'
 const CACHE_EXPIRY = 1000 * 60 * 60 * 6 // 6시간
-const DHLOTTERY_BASE = 'https://www.dhlottery.co.kr/common.do'
 
 const getCache = () => {
   try {
@@ -54,37 +52,14 @@ const parseDrawData = (data) => {
   }
 }
 
-// 1차: 내부 프록시 (/api/lotto → Vercel Function or Vite proxy)
-const fetchViaProxy = async (round) => {
+// 단일 회차 조회 (내부 프록시 경유)
+export const fetchLottoRound = async (round) => {
   const res = await fetch(`/api/lotto?method=getLottoNumber&drwNo=${round}`)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const data = await res.json()
   const parsed = parseDrawData(data)
   if (!parsed) throw new Error('returnValue != success')
   return parsed
-}
-
-// 폴백: allorigins.win CORS 우회
-const fetchViaAllOrigins = async (round) => {
-  const target = encodeURIComponent(
-    `${DHLOTTERY_BASE}?method=getLottoNumber&drwNo=${round}`
-  )
-  const res = await fetch(`https://api.allorigins.win/get?url=${target}`)
-  if (!res.ok) throw new Error(`allorigins HTTP ${res.status}`)
-  const wrapper = await res.json()
-  const data = JSON.parse(wrapper.contents)
-  const parsed = parseDrawData(data)
-  if (!parsed) throw new Error('returnValue != success')
-  return parsed
-}
-
-// 단일 회차 조회 (프록시 → allorigins 순서)
-export const fetchLottoRound = async (round) => {
-  try {
-    return await fetchViaProxy(round)
-  } catch {
-    return await fetchViaAllOrigins(round)
-  }
 }
 
 // 최근 N회차 데이터 조회 (캐싱 포함)
