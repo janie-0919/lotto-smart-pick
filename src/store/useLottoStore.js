@@ -18,6 +18,7 @@ const useLottoStore = create(
       // 당첨 데이터
       recentDraws: [],
       isLoadingDraws: false,
+      drawsError: null,
       lastFetchTime: null,
 
       // 내 번호 보관함
@@ -59,12 +60,17 @@ const useLottoStore = create(
         if (isLoadingDraws) return
         if (lastFetchTime && Date.now() - lastFetchTime < 1000 * 60 * 60) return
 
-        set({ isLoadingDraws: true })
+        set({ isLoadingDraws: true, drawsError: null })
         try {
           const draws = await fetchRecentRounds(50)
-          set({ recentDraws: draws, lastFetchTime: Date.now() })
+          if (draws.length === 0) {
+            set({ drawsError: 'API 응답이 없습니다. 잠시 후 다시 시도해주세요.' })
+          } else {
+            set({ recentDraws: draws, lastFetchTime: Date.now() })
+          }
         } catch (err) {
           console.error('당첨 데이터 로드 실패:', err)
+          set({ drawsError: err.message || '데이터를 불러올 수 없습니다.' })
         } finally {
           set({ isLoadingDraws: false })
         }

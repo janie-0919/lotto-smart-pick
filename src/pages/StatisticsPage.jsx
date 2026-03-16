@@ -28,12 +28,19 @@ const CustomTooltip = ({ active, payload, label }) => {
 }
 
 export default function StatisticsPage() {
-  const { recentDraws, isLoadingDraws, loadRecentDraws } = useLottoStore()
+  const { recentDraws, isLoadingDraws, drawsError, loadRecentDraws } = useLottoStore()
   const [range, setRange] = useState(50)
 
   useEffect(() => {
     loadRecentDraws()
   }, [loadRecentDraws])
+
+  const handleRetry = () => {
+    // 캐시 초기화 후 재시도
+    localStorage.removeItem('lotto_cache')
+    useLottoStore.setState({ lastFetchTime: null, drawsError: null })
+    loadRecentDraws()
+  }
 
   const targetDraws = useMemo(() => recentDraws.slice(0, range), [recentDraws, range])
 
@@ -101,15 +108,18 @@ export default function StatisticsPage() {
       <div className="stats-loading">
         <div className="loading-spinner" />
         <p>최근 당첨 데이터를 불러오는 중...</p>
+        <p className="stats-loading__sub">동행복권 API → CORS 프록시 순으로 시도합니다</p>
       </div>
     )
   }
 
-  if (recentDraws.length === 0) {
+  if (drawsError || recentDraws.length === 0) {
     return (
       <div className="stats-empty">
-        <p>당첨 데이터를 불러오지 못했습니다.</p>
-        <button onClick={loadRecentDraws}>다시 시도</button>
+        <div className="stats-empty__icon">⚠️</div>
+        <p className="stats-empty__title">당첨 데이터를 불러오지 못했습니다</p>
+        <p className="stats-empty__desc">{drawsError || '네트워크를 확인하고 다시 시도해주세요'}</p>
+        <button className="retry-btn" onClick={handleRetry}>🔄 다시 시도</button>
       </div>
     )
   }
