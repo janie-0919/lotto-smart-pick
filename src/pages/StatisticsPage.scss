@@ -14,7 +14,7 @@
   h1 {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text);
   }
 }
 
@@ -26,22 +26,22 @@
 .range-tab {
   padding: 0.4rem 0.9rem;
   border-radius: 8px;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  background: transparent;
-  color: rgba(255, 255, 255, 0.5);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
   font-size: 0.82rem;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.07);
-    color: rgba(255, 255, 255, 0.8);
+    background: var(--color-surface-2);
+    color: var(--color-text);
   }
 
   &.active {
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.08);
     border-color: #f59e0b;
-    color: #f59e0b;
+    color: #d97706;
   }
 }
 
@@ -53,31 +53,32 @@
 }
 
 .hot-cold-card {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-surface);
   border-radius: 16px;
   padding: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 
   &.hot {
-    border-color: rgba(239, 68, 68, 0.2);
-    background: rgba(239, 68, 68, 0.04);
+    border-color: #fca5a5;
+    background: #fff5f5;
   }
 
   &.cold {
-    border-color: rgba(59, 130, 246, 0.2);
-    background: rgba(59, 130, 246, 0.04);
+    border-color: #93c5fd;
+    background: #eff6ff;
   }
 
   .hc-label {
     font-size: 1rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
     margin-bottom: 0.2rem;
   }
 
   .hc-desc {
     font-size: 0.74rem;
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--color-text-muted);
     margin-bottom: 0.85rem;
   }
 
@@ -90,15 +91,16 @@
 
 // Chart cards
 .chart-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
 
   h2 {
     font-size: 0.95rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text);
     margin-bottom: 1.25rem;
   }
 }
@@ -118,23 +120,24 @@
 }
 
 .chart-tooltip {
-  background: rgba(20, 20, 35, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #fff;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 0.5rem 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  box-shadow: var(--shadow-md);
 
   &__label {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
   }
 
   &__value {
     font-size: 0.78rem;
-    color: #f59e0b;
+    color: #d97706;
   }
 }
 
@@ -151,11 +154,11 @@
     width: 4px;
   }
   &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-surface-2);
     border-radius: 2px;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: #d1d5e0;
     border-radius: 2px;
   }
 }
@@ -165,14 +168,14 @@
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--color-surface-2);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-border);
   transition: background 0.15s;
   flex-wrap: wrap;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: #e8eaf4;
   }
 
   &__meta {
@@ -184,13 +187,13 @@
     display: block;
     font-size: 0.85rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text);
   }
 
   &__date {
     display: block;
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
     margin-top: 1px;
   }
 
@@ -204,13 +207,13 @@
   &__prize {
     margin-left: auto;
     font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.35);
+    color: var(--color-text-muted);
     white-space: nowrap;
   }
 }
 
 .bonus-sep {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin: 0 2px;
 }
@@ -224,14 +227,14 @@
   justify-content: center;
   gap: 1.5rem;
   padding: 4rem 0;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
 .loading-spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid var(--color-border);
   border-top-color: #f59e0b;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;

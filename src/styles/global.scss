@@ -6,14 +6,19 @@
 }
 
 :root {
-  --color-bg: #0a0a14;
-  --color-surface: rgba(255, 255, 255, 0.04);
-  --color-border: rgba(255, 255, 255, 0.09);
-  --color-text: rgba(255, 255, 255, 0.88);
-  --color-text-muted: rgba(255, 255, 255, 0.4);
+  --color-bg: #f5f6fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f1f6;
+  --color-border: #e4e6ef;
+  --color-text: #1a1b2e;
+  --color-text-muted: #8b8fa8;
   --color-accent: #f59e0b;
+  --color-accent-2: #ef4444;
   --radius-md: 14px;
   --radius-lg: 20px;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
 }
 
 html {
@@ -23,9 +28,6 @@ html {
 
 body {
   background-color: var(--color-bg);
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
   color: var(--color-text);
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
@@ -39,13 +41,14 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
+  background: #f0f1f6;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: #d1d5e0;
   border-radius: 3px;
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #b0b4c8;
   }
 }
 
@@ -65,5 +68,5 @@ a {
 
 // Selection
 ::selection {
-  background: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.2);
 }
