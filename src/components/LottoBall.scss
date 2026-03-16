@@ -1,0 +1,70 @@
+.lotto-ball {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+  flex-shrink: 0;
+  transition: transform 0.15s, opacity 0.15s;
+
+  // Sizes
+  &--sm {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  &--md {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+
+  &--lg {
+    width: 56px;
+    height: 56px;
+    font-size: 1.25rem;
+  }
+
+  // Colors (공식 로또 배색)
+  &--yellow {
+    background: radial-gradient(circle at 35% 35%, #fde68a, #f59e0b);
+    color: #78350f;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+  }
+
+  &--blue {
+    background: radial-gradient(circle at 35% 35%, #93c5fd, #3b82f6);
+    color: #1e3a5f;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+  }
+
+  &--red {
+    background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444);
+    color: #7f1d1d;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  }
+
+  &--gray {
+    background: radial-gradient(circle at 35% 35%, #d1d5db, #6b7280);
+    color: #1f2937;
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+  }
+
+  &--green {
+    background: radial-gradient(circle at 35% 35%, #6ee7b7, #10b981);
+    color: #064e3b;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  }
+
+  &--highlight {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  &--dim {
+    opacity: 0.35;
+  }
+}
