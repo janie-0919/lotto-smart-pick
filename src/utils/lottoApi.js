@@ -1,10 +1,12 @@
 /**
  * 동행복권 API 연동
- * CORS 문제로 인해 Vercel Serverless Function을 통해 프록시
+ * 1차: Vercel Serverless(/api/lotto) 또는 Vite 프록시
+ * 폴백: allorigins.win CORS 우회 프록시
  */
 
 const CACHE_KEY = 'lotto_cache'
 const CACHE_EXPIRY = 1000 * 60 * 60 * 6 // 6시간
+const DHLOTTERY_BASE = 'https://www.dhlottery.co.kr/common.do'
 
 const getCache = () => {
   try {
@@ -32,13 +34,9 @@ export const estimateLatestRound = () => {
   return weeks + 1
 }
 
-// 단일 회차 데이터 조회
-export const fetchLottoRound = async (round) => {
-  const res = await fetch(`/api/lotto?method=getLottoNumber&drwNo=${round}`)
-  if (!res.ok) throw new Error('API 오류')
-  const data = await res.json()
-  if (data.returnValue !== 'success') throw new Error('데이터 없음')
-
+// 응답 데이터를 내부 형식으로 변환
+const parseDrawData = (data) => {
+  if (!data || data.returnValue !== 'success') return null
   return {
     round: data.drwNo,
     date: data.drwNoDate,
@@ -56,6 +54,39 @@ export const fetchLottoRound = async (round) => {
   }
 }
 
+// 1차: 내부 프록시 (/api/lotto → Vercel Function or Vite proxy)
+const fetchViaProxy = async (round) => {
+  const res = await fetch(`/api/lotto?method=getLottoNumber&drwNo=${round}`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  const data = await res.json()
+  const parsed = parseDrawData(data)
+  if (!parsed) throw new Error('returnValue != success')
+  return parsed
+}
+
+// 폴백: allorigins.win CORS 우회
+const fetchViaAllOrigins = async (round) => {
+  const target = encodeURIComponent(
+    `${DHLOTTERY_BASE}?method=getLottoNumber&drwNo=${round}`
+  )
+  const res = await fetch(`https://api.allorigins.win/get?url=${target}`)
+  if (!res.ok) throw new Error(`allorigins HTTP ${res.status}`)
+  const wrapper = await res.json()
+  const data = JSON.parse(wrapper.contents)
+  const parsed = parseDrawData(data)
+  if (!parsed) throw new Error('returnValue != success')
+  return parsed
+}
+
+// 단일 회차 조회 (프록시 → allorigins 순서)
+export const fetchLottoRound = async (round) => {
+  try {
+    return await fetchViaProxy(round)
+  } catch {
+    return await fetchViaAllOrigins(round)
+  }
+}
+
 // 최근 N회차 데이터 조회 (캐싱 포함)
 export const fetchRecentRounds = async (count = 50) => {
   const cached = getCache()
@@ -64,21 +95,17 @@ export const fetchRecentRounds = async (count = 50) => {
   const latest = estimateLatestRound()
   const results = []
 
-  // 병렬 요청 (최대 10개씩)
-  for (let i = 0; i < count; i += 10) {
+  // 병렬 요청 (최대 5개씩 - 요청 과부하 방지)
+  for (let i = 0; i < count; i += 5) {
     const batch = Array.from(
-      { length: Math.min(10, count - i) },
+      { length: Math.min(5, count - i) },
       (_, j) => latest - i - j
     ).filter((r) => r > 0)
 
-    try {
-      const batchResults = await Promise.allSettled(batch.map(fetchLottoRound))
-      batchResults.forEach((res) => {
-        if (res.status === 'fulfilled') results.push(res.value)
-      })
-    } catch {
-      // 배치 실패시 스킵
-    }
+    const batchResults = await Promise.allSettled(batch.map(fetchLottoRound))
+    batchResults.forEach((res) => {
+      if (res.status === 'fulfilled' && res.value) results.push(res.value)
+    })
   }
 
   results.sort((a, b) => b.round - a.round)
@@ -100,7 +127,7 @@ export const calculateFrequency = (draws) => {
   return freq
 }
 
-// Hot/Cold 번호 계산 (최근 10회 기준)
+// Hot/Cold 번호 계산 (최근 20회 기준)
 export const calculateHotCold = (draws, topN = 10) => {
   const freq = calculateFrequency(draws.slice(0, 20))
   const entries = Object.entries(freq)
