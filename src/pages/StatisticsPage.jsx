@@ -157,11 +157,11 @@ export default function StatisticsPage() {
             <BarChart data={freqData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
               <XAxis
                 dataKey="num"
-                tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 9 }}
+                tick={{ fill: '#8b8fa8', fontSize: 9 }}
                 interval={4}
               />
-              <YAxis tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.05)' }} />
+              <YAxis tick={{ fill: '#8b8fa8', fontSize: 10 }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.04)' }} />
               <Bar dataKey="count" radius={[3, 3, 0, 0]}>
                 {freqData.map((entry, i) => (
                   <Cell key={i} fill={entry.color} fillOpacity={0.85} />
@@ -196,7 +196,7 @@ export default function StatisticsPage() {
                   ))}
                 </Pie>
                 <Legend
-                  wrapperStyle={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)' }}
+                  wrapperStyle={{ fontSize: '0.78rem', color: '#8b8fa8' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -208,13 +208,13 @@ export default function StatisticsPage() {
           <div className="chart-wrap chart-wrap--sm">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={sectionData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
-                <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 10 }} />
-                <YAxis tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }} />
+                <XAxis dataKey="name" tick={{ fill: '#8b8fa8', fontSize: 10 }} />
+                <YAxis tick={{ fill: '#8b8fa8', fontSize: 10 }} />
                 <Tooltip
-                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                  contentStyle={{ background: '#1a1a2e', border: 'none', borderRadius: 8 }}
-                  labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
-                  itemStyle={{ color: '#f59e0b' }}
+                  cursor={{ fill: 'rgba(0,0,0,0.04)' }}
+                  contentStyle={{ background: '#fff', border: '1px solid #e4e6ef', borderRadius: 8 }}
+                  labelStyle={{ color: '#1a1b2e' }}
+                  itemStyle={{ color: '#d97706' }}
                 />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                   {sectionData.map((entry, i) => (
@@ -233,13 +233,13 @@ export default function StatisticsPage() {
         <div className="chart-wrap">
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={sumData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
-              <XAxis dataKey="range" tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 9 }} />
-              <YAxis tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10 }} />
+              <XAxis dataKey="range" tick={{ fill: '#8b8fa8', fontSize: 9 }} />
+              <YAxis tick={{ fill: '#8b8fa8', fontSize: 10 }} />
               <Tooltip
-                cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                contentStyle={{ background: '#1a1a2e', border: 'none', borderRadius: 8 }}
-                labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
-                itemStyle={{ color: '#8b5cf6' }}
+                cursor={{ fill: 'rgba(0,0,0,0.04)' }}
+                contentStyle={{ background: '#fff', border: '1px solid #e4e6ef', borderRadius: 8 }}
+                labelStyle={{ color: '#1a1b2e' }}
+                itemStyle={{ color: '#7c3aed' }}
               />
               <Bar dataKey="count" fill="#8b5cf6" fillOpacity={0.8} radius={[4, 4, 0, 0]} />
             </BarChart>
