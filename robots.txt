@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lotto-smart-pick.vercel.app/sitemap.xml
