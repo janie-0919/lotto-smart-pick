@@ -29,6 +29,7 @@ export default function Layout() {
       </main>
       <footer className="footer">
         <p>본 서비스는 통계 기반 균형 분산형 번호 추천을 제공합니다. 당첨을 보장하지 않습니다.</p>
+        <p className="copyright">© {new Date().getFullYear()} <span>Juyeon Lee</span>. All rights reserved.</p>
       </footer>
     </div>
   )
